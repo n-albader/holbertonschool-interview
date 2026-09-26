@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-
+#!/usr/bin/python3
 """Defines a function that creates Pascal's triangle"""
 
 
