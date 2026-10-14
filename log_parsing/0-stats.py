@@ -32,8 +32,9 @@ def main():
                 status = int(match.group(1))
                 size = int(match.group(2))
 
+                total_size += size
+
                 if status in valid_codes:
-                    total_size += size
                     status_codes[status] = (
                         status_codes.get(status, 0) + 1
                     )
