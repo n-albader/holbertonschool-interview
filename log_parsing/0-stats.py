@@ -1,17 +1,19 @@
 #!/usr/bin/python3
+"""Parse log lines and print accumulated statistics"""
+
 import sys
 import re
 
 
 def print_stats(total_size, status_codes):
-    """Print the accumulated log statistics."""
+    """Print the accumulated log statistics"""
     print("File size: {}".format(total_size))
     for code in sorted(status_codes):
         print("{}: {}".format(code, status_codes[code]))
 
 
 def main():
-    """Read logs from stdin and compute statistics."""
+    """Read logs from stdin and compute statistics"""
     total_size = 0
     status_codes = {}
     valid_codes = [200, 301, 400, 401, 403, 404, 405, 500]
