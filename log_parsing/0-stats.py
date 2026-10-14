@@ -20,8 +20,7 @@ def main():
     line_count = 0
 
     pattern = re.compile(
-        r'^\S+ - \[.+\] "GET /projects/260 HTTP/1\.1" '
-        r'(\d+) (\d+)$'
+        r'^\S+ - \[.+\] ".+" (\d+) (\d+)$'
     )
 
     try:
