@@ -20,7 +20,8 @@ def main():
     line_count = 0
 
     pattern = re.compile(
-        r'^\S+ - \[.+\] ".+" (\d+) (\d+)$'
+        r'^\S+ - \[.+\] "GET /projects/260 HTTP/1\.1" '
+        r'(\d+) (\d+)$'
     )
 
     try:
@@ -41,7 +42,7 @@ def main():
             if line_count % 10 == 0:
                 print_stats(total_size, status_codes)
 
-        if line_count % 10 != 0 or line_count == 0:
+        if line_count == 0 or line_count % 10 != 0:
             print_stats(total_size, status_codes)
 
     except KeyboardInterrupt:
