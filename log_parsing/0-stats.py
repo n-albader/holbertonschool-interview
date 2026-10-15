@@ -1,20 +1,18 @@
 #!/usr/bin/python3
-"""Parse log lines and print statistics"""
-
+"""Script that reads stdin line by line and computes metrics"""
 import sys
-import re
 
 
 def print_statistics(total_file_size, status_counts):
-    """Print the accumulated statistics."""
+    """Prints the accumulated file size and status code counts"""
     print("File size: {}".format(total_file_size))
-    for code in sorted(status_counts):
+    for code in sorted(status_counts.keys()):
         if status_counts[code] > 0:
             print("{}: {}".format(code, status_counts[code]))
 
 
 def main():
-    """Read log lines and calculate statistics"""
+    """Main function to parse log data from stdin"""
     total_file_size = 0
     status_counts = {
         "200": 0,
@@ -28,33 +26,28 @@ def main():
     }
     line_count = 0
 
-    pattern = re.compile(
-        r'^\S+ - \[.+\] ".+" (\d+) (\d+)$'
-    )
-
     try:
         for line in sys.stdin:
-            line_count += 1
-            match = pattern.match(line.strip())
+            parts = line.split()
+            if len(parts) >= 9:
+                status_code = parts[-2]
+                try:
+                    file_size = int(parts[-1])
+                    if status_code in status_counts:
+                        status_counts[status_code] += 1
+                    total_file_size += file_size
+                    line_count += 1
+                except ValueError:
+                    pass
 
-            if match:
-                status_code = match.group(1)
-                file_size = int(match.group(2))
-
-                total_file_size += file_size
-
-                if status_code in status_counts:
-                    status_counts[status_code] += 1
-
-            if line_count % 10 == 0:
+            if line_count == 10:
                 print_statistics(total_file_size, status_counts)
-
+                line_count = 0
     except KeyboardInterrupt:
         print_statistics(total_file_size, status_counts)
-        return
+        raise
 
-    if line_count % 10 != 0:
-        print_statistics(total_file_size, status_counts)
+    print_statistics(total_file_size, status_counts)
 
 
 if __name__ == "__main__":
